@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>フィールドワークの記録のため、現在地を地図上に表示します。</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>調査地点に写真を紐付けるため、フォトライブラリにアクセスします。</string>
+	<key>NSCameraUsageDescription</key>
+	<string>調査地点の写真を撮影するため、カメラにアクセスします。</string>
+</dict>
+</plist>

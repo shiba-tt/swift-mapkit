@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSCameraUsageDescription</key>
+	<string>ARガイド機能でカメラを使用して、観光スポットの情報をAR空間に表示します。</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>近くの観光スポットを検出し、ARガイドとマップ上に表示するために位置情報を使用します。</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>バックグラウンドでも近くの観光スポットを通知するために位置情報を使用します。</string>
+</dict>
+</plist>
