@@ -39,9 +39,11 @@ struct MapControlsDemo: View {
                 if showUserLocationButton {
                     MapUserLocationButton()
                 }
+#if !os(iOS)
                 if showZoomStepper {
                     MapZoomStepper()
                 }
+#endif
             }
 
             controlPanel
@@ -66,7 +68,9 @@ struct MapControlsDemo: View {
                 controlToggle(isOn: $showScale, icon: "ruler", label: "Scale")
                 controlToggle(isOn: $showPitchToggle, icon: "rotate.3d", label: "Pitch")
                 controlToggle(isOn: $showUserLocationButton, icon: "location", label: "Location")
+#if !os(iOS)
                 controlToggle(isOn: $showZoomStepper, icon: "plus.magnifyingglass", label: "Zoom")
+#endif
             }
 
             Text("地図を回転するとCompassが表示されます\nPitchボタンで3D/2D切り替えができます")

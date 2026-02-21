@@ -52,7 +52,7 @@ struct LookAroundDemo: View {
 
     @ViewBuilder
     private var bottomPanel: some View {
-        if showLookAround, let scene = lookAroundScene {
+        if showLookAround, lookAroundScene != nil {
             VStack(spacing: 0) {
                 // ヘッダー
                 HStack {
@@ -75,7 +75,7 @@ struct LookAroundDemo: View {
                 .padding(.vertical, 8)
 
                 // Look Around プレビュー
-                LookAroundPreview(scene: scene)
+                LookAroundPreview(scene: $lookAroundScene)
                     .frame(height: 300)
             }
             .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -151,3 +151,4 @@ struct LookAroundDemo: View {
         LookAroundDemo()
     }
 }
+

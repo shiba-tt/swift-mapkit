@@ -46,7 +46,7 @@ struct InteractionDemo: View {
             MapReader { proxy in
                 Map(position: $position, interactionModes: selectedInteraction.mode) {
                     // ドロップされたピン
-                    ForEach(droppedPins) { pin in
+                    ForEach(droppedPins, id: \.id) { pin in
                         Annotation("", coordinate: pin.coordinate) {
                             VStack(spacing: 2) {
                                 Image(systemName: "mappin.circle.fill")
@@ -172,7 +172,7 @@ struct InteractionDemo: View {
                 if droppedPins.count > 0 {
                     Button {
                         withAnimation {
-                            droppedPins.removeLast()
+                            _ = droppedPins.popLast()
                         }
                     } label: {
                         Label("1つ戻す", systemImage: "arrow.uturn.backward")
@@ -223,3 +223,4 @@ struct InteractionDemo: View {
         InteractionDemo()
     }
 }
+

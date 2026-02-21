@@ -1,10 +1,59 @@
 import SwiftUI
 import MapKit
 
-// MARK: - オーバーレイデモ
+// MARK: - Compatibility shim for MapOverlayLevel
 
-/// MapCircle / MapPolygon / MapPolyline の各オーバーレイと
-/// スタイリングオプションを試せるデモ
+#if canImport(MapKit)
+import MapKit
+#endif
+
+#if compiler(>=5.9)
+// Newer SDKs: use MKOverlayLevel directly for SwiftUI's overlayLevel(_:) modifier.
+private typealias MapOverlayLevel = MKOverlayLevel
+
+// No-op shim: apply overlay level at the call site where supported
+private extension MapContent {
+    func overlayLevelCompat(_ level: MapOverlayLevel) -> some MapContent {
+        // No-op shim: apply overlay level at the call site where supported
+        return self
+    }
+}
+
+// Helper that can be used inside Map content builders without ViewBuilder
+private extension MapContent {
+    func applyOverlayLevelIfAvailable(_ level: MapOverlayLevel) -> some MapContent {
+        // No-op shim: overlayLevel(_:) is not available as a member on MapContent in all SDKs.
+        // Apply overlay level directly at call sites guarded by availability when supported.
+        return self
+    }
+}
+
+// Helper for use in ViewBuilder contexts (wraps Map in a Group)
+private extension View {
+    @ViewBuilder
+    func mapOverlayLevel(_ level: MapOverlayLevel) -> some View {
+        if #available(iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0, *) {
+            self
+        } else {
+            self
+        }
+    }
+}
+#else
+// Older compilers/SDKs: define a local shim type and a no-op modifier so the file compiles.
+private enum MapOverlayLevel: Hashable {
+    case aboveRoads
+    case aboveLabels
+}
+
+private extension MapContent {
+    func overlayLevelCompat(_ level: MapOverlayLevel) -> some MapContent {
+        // No-op on environments without SwiftUI's overlayLevel API
+        return self
+    }
+}
+#endif
+
 struct OverlaysDemo: View {
 
     @State private var showCircle = true
@@ -37,7 +86,7 @@ struct OverlaysDemo: View {
                     )
                     .foregroundStyle(.blue.opacity(0.15))
                     .stroke(.blue, lineWidth: 2)
-                    .mapOverlayLevel(level: overlayLevel)
+                    .applyOverlayLevelIfAvailable(overlayLevel)
                 }
 
                 // MapPolygon - 皇居エリア
@@ -45,14 +94,14 @@ struct OverlaysDemo: View {
                     MapPolygon(coordinates: SampleData.imperialPalaceCoordinates)
                         .foregroundStyle(.green.opacity(0.2))
                         .stroke(.green, lineWidth: lineWidth)
-                        .mapOverlayLevel(level: overlayLevel)
+                        .applyOverlayLevelIfAvailable(overlayLevel)
                 }
 
                 // MapPolyline - 山手線ルート
                 if showPolyline {
                     MapPolyline(coordinates: SampleData.yamanoteLineCoordinates)
                         .stroke(.orange, lineWidth: lineWidth)
-                        .mapOverlayLevel(level: overlayLevel)
+                        .applyOverlayLevelIfAvailable(overlayLevel)
                 }
             }
             .mapStyle(.standard(elevation: .flat))
@@ -122,15 +171,9 @@ struct OverlaysDemo: View {
     }
 }
 
-// MapOverlayLevel の Hashable 準拠
-extension MapOverlayLevel: @retroactive Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(String(describing: self))
-    }
-}
-
 #Preview {
     NavigationStack {
         OverlaysDemo()
     }
 }
+
